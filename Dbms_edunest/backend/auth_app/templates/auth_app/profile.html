@@ -1,0 +1,44 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <link rel="stylesheet" href="{% static 'auth_app/profile_.css' %}">
+</head>
+<body class="theme" style="background-image: url('{% static 'auth_app/t1.png' %}'); background-size: cover; background-position: center; background-attachment: fixed;">
+
+    <div class="container">
+        <h2>User Profile</h2>
+        
+        <!-- Profile Picture Upload -->
+        <label for="profilePicInput" class="profile-pic-label">
+            <img id="profilePic" src="{% static 'auth_app/profile.png' %}" alt="User Profile" class="profile-pic">
+        </label>
+        <input type="file" id="profilePicInput" accept="image/*" class="hidden" onchange="loadProfilePicture(event)">
+
+        <!-- User Details -->
+        <p><strong>Name:</strong> <span id="userName">{{ user.username }}</span></p>
+        <p><strong>Email:</strong> <span id="userEmail">{{ user.email }}</span></p>
+        <p><strong>Current Task:</strong> <span id="currentTask">{{ user.current_task }}</span></p>
+        <p><strong>Completed Tasks:</strong> <span id="completedTasks">{{ user.completed_tasks }}</span></p>
+        <p><strong>App Usage Time:</strong> <span id="usageTime">{{ user.usage_time }}</span></p>
+
+        <!-- Back Button -->
+        <a href="{% url 'dashboard' %}" class="back-link">Back</a>
+    </div>
+
+    <script>
+        // Handle profile picture upload and preview
+        function loadProfilePicture(event) {
+            const reader = new FileReader();
+            reader.onload = function () {
+                document.getElementById('profilePic').src = reader.result;
+            };
+            reader.readAsDataURL(event.target.files[0]);
+        }
+    </script>
+
+</body>
+</html>

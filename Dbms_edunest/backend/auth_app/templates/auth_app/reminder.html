@@ -1,0 +1,117 @@
+{%load static%}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reminder Countdown</title>
+    <link rel="stylesheet" href="{% static 'auth_app/reminder.css' %}">
+</head>
+<body class="theme">
+    <div class="container">
+        <h1>Reminder Countdown</h1>
+
+        <!-- Add Reminder Button -->
+        <button id="add-reminder-btn">Add New Reminder</button>
+
+        <!-- Countdown List -->
+        <div class="countdown-list" id="countdown-list">
+            <!-- Reminders will be dynamically added here -->
+        </div>
+
+        <a href="{% url 'dashboard' %}" class="back-link">Back</a>
+    </div>
+
+    <!-- Reminder Modal -->
+    <div id="reminder-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Add Reminder</h2>
+            <label for="reminder-text">Reminder:</label>
+            <input type="text" id="reminder-text" placeholder="Enter reminder">
+
+            <label for="reminder-time">Time:</label>
+            <input type="datetime-local" id="reminder-time">
+
+            <button id="save-reminder-btn">Save Reminder</button>
+        </div>
+    </div>
+
+    <!-- JavaScript Code Inside HTML -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const addReminderBtn = document.getElementById("add-reminder-btn");
+            const saveReminderBtn = document.getElementById("save-reminder-btn");
+            const reminderModal = document.getElementById("reminder-modal");
+            const closeModal = document.querySelector(".close");
+            const reminderText = document.getElementById("reminder-text");
+            const reminderTime = document.getElementById("reminder-time");
+            const countdownList = document.getElementById("countdown-list");
+
+            // Open modal
+            addReminderBtn.addEventListener("click", () => {
+                reminderModal.style.display = "block";
+            });
+
+            // Close modal
+            closeModal.addEventListener("click", () => {
+                reminderModal.style.display = "none";
+            });
+
+            // Save Reminder
+            saveReminderBtn.addEventListener("click", () => {
+                const reminder = reminderText.value.trim();
+                const time = reminderTime.value;
+
+                if (reminder && time) {
+                    // Convert time to ISO format and ensure it's in UTC
+                    const reminderTimeISO = new Date(time).toISOString();
+
+                    fetch("/auth/save-reminder/", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "X-CSRFToken": getCSRFToken(),
+                        },
+                        body: JSON.stringify({ reminder_text: reminder, reminder_time: reminderTimeISO }),
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        alert(data.message);
+                        reminderModal.style.display = "none";
+                        loadReminders(); // Refresh list
+                    })
+                    .catch(error => console.error("Error:", error));
+                } else {
+                    alert("Please fill in both fields.");
+                }
+            });
+
+
+            // Fetch and display reminders
+            function loadReminders() {
+                fetch("/auth/get-reminders/")
+                    .then(response => response.json())
+                    .then(data => {
+                        countdownList.innerHTML = "";
+                        data.reminders.forEach(reminder => {
+                            const div = document.createElement("div");
+                            div.classList.add("reminder-item");
+                            div.innerHTML = `<p><strong>${reminder.text}</strong> - ${reminder.time}</p>`;
+                            countdownList.appendChild(div);
+                        });
+                    })
+                    .catch(error => console.error("Error loading reminders:", error));
+            }
+
+            // Fetch CSRF token for secure requests
+            function getCSRFToken() {
+                return document.cookie.split("; ").find(row => row.startsWith("csrftoken"))?.split("=")[1];
+            }
+
+            loadReminders(); // Load reminders on page load
+        });
+    </script>
+</body>
+</html>

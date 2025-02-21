@@ -1,0 +1,138 @@
+/* General Styles */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    color: #fff; /* Ensure good contrast */
+}
+
+/* Container Styles */
+.container {
+    width: 60%;
+    max-width: 800px;
+    margin: 50px auto;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.1); /* Slightly transparent white */
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(10px); /* Glassmorphism effect */
+}
+
+/* Heading */
+h1 {
+    text-align: center;
+    color: #ff6b6b;
+}
+
+/* Form Input Styles */
+.note-title, .note-textarea {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: 5px;
+    font-size: 16px;
+    background: rgba(255, 255, 255, 0.026);
+    color: white;
+    outline: none;
+}
+
+/* Placeholder Styling */
+.note-title::placeholder,
+.note-textarea::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+/* Textarea */
+.note-textarea {
+    height: 200px;
+    resize: vertical;
+}
+
+/* Buttons */
+.buttons {
+    display: flex;
+    justify-content: space-between;
+}
+
+button {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+/* Specific Button Styles */
+.add-folder {
+    display: block;
+    margin: 10px auto;
+    background: #28a745;
+    color: white;
+    font-weight: bold;
+}
+
+.save {
+    background: #007bff;
+    color: white;
+    transition: 0.3s ease-in-out;
+}
+
+.delete {
+    background: #dc3545;
+    color: white;
+    transition: 0.3s ease-in-out;
+}
+
+/* Hover Effects */
+.save:hover {
+    background: #0056b3;
+}
+
+.delete:hover {
+    background: #a71d2a;
+}
+
+/* Notes List */
+.notes-list {
+    list-style: none;
+    padding: 0;
+    margin-top: 20px;
+}
+
+.notes-list li {
+    background: rgba(255, 255, 255, 0.15);
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+
+.notes-list h3 {
+    margin: 0;
+    color: #ffcc00;
+}
+
+.notes-list p {
+    margin: 5px 0;
+}
+
+.notes-list small {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+/* Back Link */
+.back-link {
+    display: block;
+    text-align: center;
+    margin-top: 20px;
+    color: #ffcc00;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+.back-link:hover {
+    text-decoration: underline;
+    color: #ff9900;
+}

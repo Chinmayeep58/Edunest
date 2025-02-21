@@ -1,0 +1,81 @@
+# Byte-compiled / Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+venv/
+env/
+
+# Django and Database
+db.sqlite3
+*.sqlite3
+*.log
+*.pot
+*.pyc
+*.pyo
+*.pyd
+
+# Django Secret Keys (Make sure to use environment variables instead)
+.env
+*.env
+
+# Migrations (optional, but recommended to keep them tracked)
+# Uncomment to ignore migrations
+# **/migrations/
+
+# Media and Static Files (only if generated dynamically)
+media/
+staticfiles/
+
+# Local Django settings (if you use a local settings module)
+local_settings.py
+
+# VS Code settings
+.vscode/
+
+# JetBrains IDEs (PyCharm, WebStorm, etc.)
+.idea/
+
+# Mac OS system files
+.DS_Store
+
+# Windows system files
+Thumbs.db
+
+# Compiled C extensions
+*.so
+
+# Pip and Python-related files
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Coverage reports
+.coverage
+*.cover
+htmlcov/
+
+# MySQL database dumps
+*.sql
+
+# Python packaging files
+dist/
+build/
+*.egg-info/
+
+# Node.js dependencies (if using React or Vue in Django)
+node_modules/
+
+# Celery task queue
+celerybeat-schedule
+
+# Gunicorn socket file
+gunicorn.sock
+
+# Docker and Kubernetes
+docker-compose.yml
+*.dockerfile
+.kubernetes/

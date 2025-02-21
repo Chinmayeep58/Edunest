@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Register</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'auth_app/register.css' %}">
+</head>
+<body>
+    <div class="wrapper">
+        <img id="register-image" src="{% static 'auth_app/t2.jpg' %}" alt="Register Background">
+        <div class="register">
+            <h2>Register</h2>
+            <form method="POST">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit">Register</button>
+            </form>
+            <p>Already have an account? <a href="{% url 'login' %}">Login</a></p>
+        </div>
+    </div>
+</body>
+</html>

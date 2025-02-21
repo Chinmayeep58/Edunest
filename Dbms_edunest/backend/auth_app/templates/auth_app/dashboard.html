@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}  <!-- Load the static files tag -->
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'auth_app/main_.css' %}">  <!-- Corrected static file reference -->
+</head>
+<body>
+    <div class="wrapper">
+        <!-- User Profile Button Positioned at Top-Left -->
+        <div class="profile-container">
+            <form method="POST" action="{% url 'profile' %}">
+                {% csrf_token %}
+                <button type="submit" class="profile">Profile</button>
+            </form>
+        </div>
+
+        <!-- Logout Button Positioned at Top-Right -->
+        <div class="logout-container">
+            <form method="POST" action="{% url 'logout' %}">
+                {% csrf_token %}
+                <button type="submit" class="logout">Log out</button>
+            </form>
+        </div>
+
+        <h2 style="color: rgb(33, 157, 135);">MINDLY</h2>
+
+        <div class="main">
+            <h1 style="color: rgb(33, 157, 135);">Welcome, {{ username }}</h1>
+
+            <nav class="icon-grid">
+                <a href="{% url 'mynotes' %}" class="nav-item">
+                    <img src="{% static 'auth_app/n.png' %}" alt="Notes">
+                    <span>Notes</span>
+                </a>
+                <a href="{% url 'studyplanner' %}" class="nav-item">
+                    <img src="{% static 'auth_app/p.png' %}" alt="Planner">
+                    <span>Planner</span>
+                </a>
+                <a href="{% url 'focus' %}" class="nav-item">
+                    <img src="{% static 'auth_app/f.png' %}" alt="Focus">
+                    <span>Focus</span>
+                </a>
+                <a href="{% url 'reminder' %}" class="nav-item">
+                    <img src="{% static 'auth_app/c.png' %}" alt="Reminder">
+                    <span>Reminder</span>
+                </a>
+            </nav>
+        </div>
+    </div>
+</body>
+</html>

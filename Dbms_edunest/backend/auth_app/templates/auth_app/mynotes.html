@@ -1,0 +1,46 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notes</title>
+    <link rel="stylesheet" href="{% static 'auth_app/mynotes.css' %}">
+</head>
+<body class="theme" style="background-image: url('{% static 'auth_app/t1.png' %}'); background-size: cover; background-position: center; background-attachment: fixed;">
+
+    <div class="container">
+        <h1>My Notes</h1>
+        <button class="add-folder">Add New Folder</button>
+
+        <!-- Notes Form -->
+        <form method="POST" action="{% url 'save_note' %}">
+            {% csrf_token %}
+            <input type="text" name="title" placeholder="Note Title" class="note-title" required>
+            <textarea name="content" placeholder="Write your note here..." class="note-textarea" required style="color:black"></textarea>
+            <div class="buttons">
+                <button type="submit" class="save">Save</button>
+                <button type="reset" class="delete">Clear</button>
+            </div>
+        </form>
+
+        <!-- Display Existing Notes -->
+        <h2>Saved Notes</h2>
+        <ul class="notes-list">
+            {% for note in notes %}
+                <li>
+                    <h3>{{ note.title }}</h3>
+                    <p>{{ note.content }}</p>
+                    <small>Created on: {{ note.created_at }}</small>
+                </li>
+            {% empty %}
+                <p>No notes saved yet.</p>
+            {% endfor %}
+        </ul>
+
+        <!-- Back Button -->
+        <a href="{% url 'dashboard' %}" class="back-link">Back</a>
+    </div>
+
+</body>
+</html>
