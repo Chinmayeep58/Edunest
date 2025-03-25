@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Study Planner</title>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'auth_app/studyplanner.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h2 class="page-title">Study Planner</h2>
+
+        <!-- Add Study Session Form -->
+        <div class="form-container">
+            <form id="studyForm" class="study-form">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="task">Task</label>
+                    <input type="text" id="task" class="form-control" placeholder="Enter your study task" required>
+                </div>
+                <div class="form-group">
+                    <label for="start_time">Start Time</label>
+                    <input type="datetime-local" id="start_time" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="end_time">End Time</label>
+                    <input type="datetime-local" id="end_time" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="session_date">Date</label>
+                    <input type="date" id="session_date" class="form-control" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Add Session</button>
+            </form>
+        </div>
+
+        <h3 class="session-heading">Your Study Sessions</h3>
+        <div class="table-container">
+            <table class="study-table">
+                <thead>
+                    <tr>
+                        <th>Task</th>
+                        <th>Start Time</th>
+                        <th>End Time</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody id="sessionList">
+                    <tr>
+                        <td colspan="4" class="no-data">No study sessions added yet.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById("studyForm").addEventListener("submit", function(event) {
+            event.preventDefault(); // Prevent default form submission
+
+            let user_id = 1;  // Replace with actual user_id from session or authentication
+            let task = document.getElementById("task").value;
+            let start_time = document.getElementById("start_time").value;
+            let end_time = document.getElementById("end_time").value;
+            let session_date = document.getElementById("session_date").value;
+
+            fetch("/add-study-session/", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRFToken": document.querySelector("input[name=csrfmiddlewaretoken]").value
+                },
+                body: JSON.stringify({
+                    user_id: user_id,
+                    task: task,
+                    start_time: start_time,
+                    end_time: end_time,
+                    session_date: session_date
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert("Study session added successfully!");
+                    location.reload(); // Reload page to show new entry
+                } else {
+                    alert("Error: " + data.message);
+                }
+            })
+            .catch(error => console.error("Error:", error));
+        });
+    </script>
+</body>
+</html>

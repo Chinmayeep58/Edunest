@@ -9,9 +9,8 @@ urlpatterns = [
     path('profile/', views.profile_view, name='profile'),
     path('logout/', views.logout_view, name='logout'),
     
-    # Add this:
     path('mynotes/', views.mynotes_view, name='mynotes'),
-    path('studyplanner/', views.studyplanner_view, name='studyplanner'),
+    # path('studyplanner/', views.studyplanner_view, name='studyplanner'),
     path('focus/', views.focus_view, name='focus'),
     path('reminder/', views.reminder_view, name='reminder'),
 
@@ -21,5 +20,9 @@ urlpatterns = [
     path("save-reminder/", views.save_reminder, name="save_reminder"),
     path("get-reminders/", views.get_reminders, name="get_reminders"),
     path("auth/delete-reminder/<int:reminder_id>/", views.delete_reminder, name="delete_reminder"),
+
+    path('studyplanner/', views.studyplanner_view, name='studyplanner'),
+    path("add-study-session/", views.add_study_session, name="add_study_session"),
+    path('user-notes/', views.user_notes, name='user_notes'),
 
 ]

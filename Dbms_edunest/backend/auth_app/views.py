@@ -108,13 +108,13 @@ def save_note(request):
                         VALUES (%s, %s, %s, NOW())
                     """, [user_id, title, content])
 
-                    cursor.execute("""
-                    INSERT INTO user_act (user_id, login_count, notes_access_count, last_activity_at) 
-                    VALUES (%s, 0, 1, %s)
-                    ON DUPLICATE KEY UPDATE 
-                        notes_access_count = notes_access_count + 1, 
-                        last_activity_at = %s
-                """, [user_id, now(), now()])
+                    # cursor.execute("""
+                    #     INSERT INTO user_act (user_id, last_activity_at, activity_type) 
+                    #     VALUES (%s, NOW(), 'notes_saving')
+                    #     ON DUPLICATE KEY UPDATE 
+                    #         last_activity_at = VALUES(last_activity_at),
+                    #         activity_type = 'notes_saving'
+                    # """, [user_id, now])
 
                     return redirect("notes")  # Redirect to the notes page
 
@@ -151,9 +151,37 @@ def notes_view(request):
     return redirect('login')
 
 
+# def notes_list(request):
+#     notes = Note.objects.all()
+#     return render(request, "auth_app/mynotes.html", {"notes": notes})
+
+
 def notes_list(request):
-    notes = Note.objects.all()
-    return render(request, "auth_app/mynotes.html", {"notes": notes})
+    username = request.session.get('username')
+
+    if username:
+        with connection.cursor() as cursor:
+            # Fetch user ID from username
+            cursor.execute("SELECT id FROM users WHERE username = %s", [username])
+            user = cursor.fetchone()
+
+            if user:
+                user_id = user[0]
+
+                # Fetch notes for the logged-in user only
+                cursor.execute("""
+                    SELECT title, content, created_at 
+                    FROM notes 
+                    WHERE user_id = %s 
+                    ORDER BY created_at DESC
+                """, [user_id])
+                notes = cursor.fetchall()
+
+                notes_list = [{'title': note[0], 'content': note[1], 'created_at': note[2]} for note in notes]
+
+                return render(request, "auth_app/mynotes.html", {"notes": notes_list})
+
+    return redirect("login")  # Redirect to login if user not found
 
 
 
@@ -335,6 +363,39 @@ from django.db import connection
 from django.utils.timezone import now
 from .models import User, UserAct
 
+# def user_login(request):
+#     if request.method == "POST":
+#         username = request.POST.get("username")
+#         password = request.POST.get("password")
+
+#         user = authenticate(request, username=username, password=password)
+
+#         if user:
+#             login(request, user)
+#             current_time = now()
+
+#             # Log user login activity
+#             with connection.cursor() as cursor:
+#                 cursor.execute("SELECT id FROM users WHERE username = %s", [username])
+#                 user_id = cursor.fetchone()[0]
+
+#                 cursor.execute("SELECT * FROM user_act WHERE user_id = %s", [user_id])
+#                 user_act = cursor.fetchone()
+
+#                 cursor.execute("""
+#                     INSERT INTO user_act (user_id, login_count, notes_access_count, last_login_at, last_activity_at) 
+#                     VALUES (%s, 1, 0, %s, %s)
+#                     ON DUPLICATE KEY UPDATE 
+#                         login_count = login_count + 1, 
+#                         last_login_at = %s, 
+#                         last_activity_at = %s;
+#                 """, [user.id, current_time, current_time, current_time, current_time])
+
+#             return redirect("dashboard")
+
+#     return render(request, "auth_app/login.html")
+
+
 def user_login(request):
     if request.method == "POST":
         username = request.POST.get("username")
@@ -351,18 +412,68 @@ def user_login(request):
                 cursor.execute("SELECT id FROM users WHERE username = %s", [username])
                 user_id = cursor.fetchone()[0]
 
-                cursor.execute("SELECT * FROM user_act WHERE user_id = %s", [user_id])
-                user_act = cursor.fetchone()
-
                 cursor.execute("""
-                    INSERT INTO user_act (user_id, login_count, notes_access_count, last_login_at, last_activity_at) 
-                    VALUES (%s, 1, 0, %s, %s)
+                    INSERT INTO user_act (user_id, activity_type, last_activity_at) 
+                    VALUES (%s, %s, %s)
                     ON DUPLICATE KEY UPDATE 
-                        login_count = login_count + 1, 
-                        last_login_at = %s, 
                         last_activity_at = %s;
-                """, [user.id, current_time, current_time, current_time, current_time])
+                """, [user.id, "LOGIN", current_time, current_time])
 
             return redirect("dashboard")
 
     return render(request, "auth_app/login.html")
+
+
+
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+import json
+from django.db import connection
+
+@csrf_exempt
+def add_study_session(request):
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+            user_id = data.get("user_id")
+            task = data.get("task")
+            start_time = data.get("start_time")
+            end_time = data.get("end_time")
+            session_date = data.get("session_date")
+
+            with connection.cursor() as cursor:
+                cursor.execute(
+                    """
+                    INSERT INTO study_sessions (user_id, task, start_time, end_time, session_date, created_at)
+                    VALUES (%s, %s, %s, %s, %s, NOW())
+                    """,
+                    [user_id, task, start_time, end_time, session_date]
+                )
+
+            return JsonResponse({"success": True, "message": "Study session added successfully!"})
+
+        except Exception as e:
+            return JsonResponse({"success": False, "message": str(e)}, status=500)
+
+    return JsonResponse({"success": False, "message": "Invalid request"}, status=400)
+
+
+from django.shortcuts import render
+from django.db import connection
+
+def user_notes(request):
+    with connection.cursor() as cursor:
+        cursor.execute("""
+            SELECT users.id, users.username, notes.title, notes.content, notes.created_at 
+            FROM users 
+            INNER JOIN notes ON users.id = notes.user_id
+        """)
+        rows = cursor.fetchall()  # Fetch all rows
+
+    # Convert raw tuples into a list of dictionaries
+    user_notes_data = [
+        {"user_id": row[0], "username": row[1], "title": row[2], "content": row[3], "created_at": row[4]} 
+        for row in rows
+    ]
+
+    return render(request, 'auth_app/user_notes.html', {"user_notes": user_notes_data})

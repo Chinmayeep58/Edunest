@@ -27,7 +27,7 @@
             </form>
         </div>
 
-        <h2 style="color: rgb(33, 157, 135);">MINDLY</h2>
+        <h2 style="color: rgb(33, 157, 135);">EDUNEST</h2>
 
         <div class="main">
             <h1 style="color: rgb(33, 157, 135);">Welcome, {{ username }}</h1>
@@ -48,6 +48,10 @@
                 <a href="{% url 'reminder' %}" class="nav-item">
                     <img src="{% static 'auth_app/c.png' %}" alt="Reminder">
                     <span>Reminder</span>
+                </a>
+                <a href="{% url 'user_notes' %}" class="nav-item">
+                    <img src="{% static 'auth_app/u.png' %}" alt="User Notes">
+                    <span>User Notes</span>
                 </a>
             </nav>
         </div>

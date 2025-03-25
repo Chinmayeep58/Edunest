@@ -1,0 +1,164 @@
+/* Set the background image */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', sans-serif;
+    background-image: url('t1.png'); /* Replace with your image path */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Wrapper styling */
+.container {
+    text-align: center;
+    background-color: rgba(12, 11, 11, 0.8); /* Semi-transparent dark background */
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(243, 241, 241, 0.1);
+    max-width: 800px;
+    width: 90%;
+}
+
+/* Page Title */
+.page-title {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #f8f9fa;
+    margin-bottom: 20px;
+}
+
+/* Logout button styling */
+.logout-container {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+}
+
+.logout {
+    background-color: #ff7661;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.logout:hover {
+    background-color: #ff1c1c;
+}
+
+/* Profile button styling */
+.profile-container {
+    position: absolute;
+    top: 10px;
+    left: 120px;
+}
+
+.profile {
+    background-color: #ff7661;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+} 
+
+/* Form Styles */
+.form-container {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.study-form .form-group {
+    margin-bottom: 15px;
+}
+
+.study-form label {
+    font-weight: bold;
+    color: #f8f9fa;
+}
+
+.study-form .form-control {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background: rgba(255, 255, 255, 0.2);
+    color: #f8f9fa;
+}
+
+.study-form .form-control::placeholder {
+    color: #ddd;
+}
+
+.study-form .btn-primary {
+    background: #007bff;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+    transition: background 0.3s;
+}
+
+.study-form .btn-primary:hover {
+    background: #0056b3;
+}
+
+/* Study Sessions Table */
+.session-heading {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #f8f9fa;
+    margin-top: 20px;
+}
+
+.table-container {
+    overflow-x: auto;
+}
+
+.study-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.study-table th,
+.study-table td {
+    padding: 12px;
+    border: 1px solid #ddd;
+    text-align: center;
+    color: #f8f9fa;
+}
+
+.study-table th {
+    background: rgba(0, 123, 255, 0.8);
+    color: white;
+    font-weight: bold;
+}
+
+.study-table tr:nth-child(even) {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.study-table tr:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.no-data {
+    text-align: center;
+    font-size: 14px;
+    color: #ccc;
+    padding: 10px;
+}

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Notes</title>
+    <link rel="stylesheet" href="{% static 'auth_app/user_notes.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h1>Your Notes</h1>
+        
+        <table class="notes-table">
+            <tr>
+                <th>Note Title</th>
+                <th>Content</th>
+                <th>Created At</th>
+            </tr>
+            {% for note in user_notes %}
+            <tr>
+                <td>{{ note.title }}</td>
+                <td>{{ note.content }}</td>
+                <td>{{ note.created_at }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="3">No notes found</td>
+            </tr>
+            {% endfor %}
+        </table>
+
+        <a href="{% url 'dashboard' %}" class="back-button">Back to Dashboard</a>
+    </div>
+</body>
+</html>
